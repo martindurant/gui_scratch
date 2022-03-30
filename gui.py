@@ -6,9 +6,10 @@ import sys
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
-        super(Ui, self).__init__() # Call the inherited classes __init__ method
-        uic.loadUi('gui.ui', self) # Load the .ui file
-        self.show() # Show the GUI
+        super(Ui, self).__init__()
+        uic.loadUi('gui.ui', self)
+        self.show()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
