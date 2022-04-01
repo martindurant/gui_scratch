@@ -1,0 +1,11 @@
+name: gui-scratch
+
+
+packages:
+  - python=3.8
+  - pyqt
+
+commands:
+  default:
+    unix: python gui.py
+
