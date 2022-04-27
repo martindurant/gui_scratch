@@ -26,16 +26,17 @@ class GUI:
             value=[],
             options=[
                 "▼ builtin",
-                "  ▶ seas".replace(" ", space),
+                "   ▶ seas".replace(" ", space),
                 "▼ nucleus",
-                "  ▼ Albert's".replace(" ", space),
-                "    ⌗ example".replace(" ", space),
+                "   ▼ Albert's".replace(" ", space),
+                "      example ⌗".replace(" ", space),
                 "▼ session",
-                "  ▶ mycat".replace(" ", space),
-                "  𝛴 other".replace(" ", space)
+                "   ▶ mycat".replace(" ", space),
+                "   other 𝛴".replace(" ", space)
             ],
             size=12,
-            scroll=True
+            scroll=True,
+            height_policy="max"
         )
         up = widgets.Button(name="Upload", disabled=True)
         refr = widgets.Button(name="Refresh", disabled=True)
@@ -45,12 +46,13 @@ class GUI:
             up, refr, share, sear, **kw
         )
         left = pn.Column(
-            cats, left_buttons, **kw
+            cats, left_buttons, height_policy="max", **kw
         )
 
         details = pane.Markdown(
             f"""```yaml\n{detail}\n```""",
-            scroll=True
+            scroll=True,
+            width_policy="max"
         )
 
         copy = widgets.Button(name="Copy code")
@@ -68,7 +70,8 @@ class GUI:
 
         discovered = pn.pane.Markdown(
             f"""```yaml\n{d}\n```""",
-            scroll=True
+            scroll=True,
+            width_policy="max"
         )
 
         right = pn.Column(
