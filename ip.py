@@ -2,8 +2,6 @@ import fsspec.utils
 import ipywidgets as ip
 from IPython.display import Code, display
 from ipytree import Tree, Node as IPyNode
-import pandas as pd
-import hvplot.pandas
 import intake
 from traitlets import Unicode
 import panel as pn
@@ -41,6 +39,7 @@ icons = {
     "dataframe": "database",
     "array": "grid"
 }
+ex = [None]
 
 
 def log_callback(func):
@@ -50,6 +49,7 @@ def log_callback(func):
             return func(*args, **kwargs)
         except Exception as e:
             logger.debug(str(e))
+            ex[0] = e
             raise
     return _
 
@@ -94,7 +94,7 @@ class GUI:
                          style={'height': 'initial'})
         self.detail = detail
 
-        pars = ip.VBox(
+        self.pars = ip.VBox(
             [
                 ip.HTML("Parameters"),
                 ip.Text(value="value", description="text_thing"),
@@ -121,7 +121,7 @@ class GUI:
         code_button.on_click(self.code_clicked)
         discover_button.on_click(self.discover_clicked)
 
-        right = ip.VBox([detail, pars, right_buttons, self.out],
+        right = ip.VBox([detail, self.pars, right_buttons, self.out],
                         layout=ip.Layout(width="60%", height="80%"),
                         style={"height": "initial"})
 
@@ -156,7 +156,7 @@ class GUI:
                 self.upload_button.options = [
                      "Upload to..."
                 ] + list(intake.cat.anaconda_catalogs._entries) + ["New..."]
-            except exception as e:
+            except Exception as e:
                 self.error = str(e)
         else:
             self.nuc.disabled = True
@@ -198,6 +198,7 @@ class GUI:
         if here.container == "catalog":
             nodes = []
             for k, v in here._entries.items():
+                # TODO: some cats are huge, only expand on demand or only allow search
                 nodes.append(Node(path=f"{selected.path}.{k}",
                                   name=k, icon=icons[v.container]))
             selected.nodes = tuple(nodes)
@@ -214,6 +215,11 @@ class GUI:
             else:
                 self.plot_button.options = ["Plot..."]
                 self.plot_button.disabled = True
+        nodes = []
+        for up_dict in here.describe()["user_parameters"]:
+            # generate parameter-specific widgets
+            pass
+
 
     @log_callback
     def plot_clicked(self, ev):
